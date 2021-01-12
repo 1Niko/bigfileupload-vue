@@ -1,9 +1,8 @@
 <template>
   <div class="file-upload">
     <div class="file_contain">
-      <h1>大文件分片上传、极速秒传</h1>
+      <h1 style="text-align: center">大文件分片上传、极速秒传</h1>
       <div class="file-upload-el">
-
         <el-upload
             class="upload-demo"
             drag
@@ -21,6 +20,18 @@
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
         上传进度：
         <el-progress type="circle" :percentage="percent" :status="f_status" :width="50"></el-progress>
+      </div>
+      <div>
+        <uploader :options="options" class="uploader-example">
+          <uploader-unsupport></uploader-unsupport>
+          <uploader-drop>
+            <p>拖拽文件到这或者</p>
+            <uploader-btn>选择文件</uploader-btn>
+            <uploader-btn :attrs="attrs">选择图片</uploader-btn>
+            <uploader-btn :directory="true">选择文件夹</uploader-btn>
+          </uploader-drop>
+          <uploader-list></uploader-list>
+        </uploader>
       </div>
       <div>
         <template>
@@ -58,6 +69,14 @@ export default {
   data() {
 
     return {
+      options: {
+        // https://github.com/simple-uploader/Uploader/tree/develop/samples/Node.js
+        target: '//localhost:3000/upload',
+        testChunks: false
+      },
+      attrs: {
+        accept: 'image/*'
+      },
       actionUrl: 'http://localhost/upload',//上传的后台地址
       shardSize: 10 * 1024 * 1024,//分片大小10M
       videoUrl: '',
@@ -72,8 +91,8 @@ export default {
 
   },
   mounted() {
-    this.getFileList();
-  },
+  this.getFileList();
+},
   methods: {
 
     handleExceed(files, fileList) {
@@ -143,27 +162,20 @@ export default {
           _this.recursionUpload(param, file);
         }
       } else {
-        this.$message({
-          message: '文件上传失败',
-          type: 'failu'
-        });
-        this.f_status = "success";
+        this.$message.error('文件上传失败');
+        this.f_status = "exception";
       }
-
-
     },
 
     async handUpLoad(req) {
       let _this = this;
       var file = req.file;
 
-
       //文件名称和格式，方便后台合并的时候知道要合成什么格式
       let fileName = file.name;
       let suffix = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length).toLowerCase();
       //这里判断文件格式，有其他格式的自行判断
       if (!(!fileName.endsWith('.mp4') || !fileName.endsWith('.flv') || !fileName.endsWith('.pdf') || !fileName.endsWith('.rar'))) {
-        console.log(!fileName.endsWith('.pdf'))
         this.$message.error('文件格式错了哦。。');
         return;
       }
@@ -190,7 +202,6 @@ export default {
       let checkIndexData = await _this.check(key);//得到文件分片索引
       let checkIndex = checkIndexData.findex;
 
-      //console.log(checkIndexData)
       if (checkIndex == -1) {
         this.recursionUpload(param, file);
       } else if (checkIndex < shardTotal) {
@@ -200,13 +211,10 @@ export default {
         this.percent = 100;
         this.f_status = "success"
         this.$message({
-          message: '极速秒传成功。。。。。',
+          message: '极速秒传成功!!!',
           type: 'success'
         });
       }
-
-
-      //console.log('结果：', res)
     },
 
     getFileShard(shardIndex, shardSize, file) {
@@ -220,10 +228,10 @@ export default {
     async getFileList() {
       let res = await this.$http.get('/list');
       this.tableData = res.data.data;
-      console.log(this.tableData);
     },
-    handleClick(file){
 
+    handleClick(file){
+      console.log(file)
     }
 
   }
@@ -232,14 +240,28 @@ export default {
 </script>
 
 <style scoped lang="less">
+.file-upload-el{
+  text-align: center;
+}
 .file-upload {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  .file_contain {
-
-  }
-
+}
+.uploader-example {
+  width: 880px;
+  padding: 15px;
+  margin: 40px auto 0;
+  font-size: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+}
+.uploader-example .uploader-btn {
+  margin-right: 4px;
+}
+.uploader-example .uploader-list {
+  max-height: 440px;
+  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 </style>

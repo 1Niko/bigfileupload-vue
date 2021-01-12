@@ -1,23 +1,24 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import FileUpload from "../views/FileUpload";
+import demo from "@/views/demo";
 
 
 
 Vue.use(VueRouter);
 
   const routes = [
+  // {
+  //   path: '/',
+  //   name: 'FileUpload',
+  //   component: FileUpload
+  // },
   {
     path: '/',
-    name: 'FileUpload',
-    component: FileUpload
+    name: 'demo',
+    component: demo
   },
-  {
-    path: '/about',
-    name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+
 ]
 
 const router = new VueRouter({

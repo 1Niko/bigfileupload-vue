@@ -6,8 +6,9 @@ import store from './store'
 Vue.config.productionTip = false
 
 import ElementUI from 'element-ui';
-import './assets/globle.css'
+import './assets/globle.css';
 import 'element-ui/lib/theme-chalk/index.css';
+
 Vue.use(ElementUI);
 
 
@@ -22,6 +23,14 @@ axios.defaults.baseURL='http://localhost/'
 * */
 import md5 from 'js-md5';
 Vue.prototype.$md5 = md5;
+
+/*
+ * npm install vue-simple-uploader --save
+ *
+ * */
+import uploader from 'vue-simple-uploader';
+
+Vue.use(uploader);
 
 new Vue({
   router,
