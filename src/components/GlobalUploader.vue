@@ -51,13 +51,13 @@
      *            Bus.$on('fileSuccess', fn); 文件上传成功的回调
      */
 
-    import {ACCEPT_CONFIG} from './js/config';
-    import Bus from './js/bus';
+    import {ACCEPT_CONFIG} from '@/assets/js/config';
+    import Bus from '@/assets/js/bus';
     import SparkMD5 from 'spark-md5';
 
     // 这两个是我自己项目中用的，请忽略
-    import {Ticket} from '@/assets/js/utils';
-    import api from '@/api';
+    // import {Ticket} from '@/assets/js/utils';
+    // import api from '@/api';
 
     export default {
         data() {
@@ -128,7 +128,9 @@
                 // 如果服务端返回需要合并
                 if (res.needMerge) {
                     // 文件状态设为“合并中”
-                    this.statusSet(file.id, 'merging');
+                    this.statusSe
+
+                  t(file.id, 'merging');
 
                     api.mergeSimpleUpload({
                         tempName: res.tempName,
@@ -351,23 +353,23 @@
             font-size: 16px;
         }
 
-        /deep/.uploader-file-icon {
+        .uploader-file-icon {
             &:before {
                 content: '' !important;
             }
 
             &[icon=image] {
-                background: url(./images/image-icon.png);
+                background: url(/src/assets/images/image-icon.png);
             }
             &[icon=video] {
-                background: url(./images/video-icon.png);
+                background: url(/src/assets/images/video-icon.png);
             }
             &[icon=document] {
-                background: url(./images/text-icon.png);
+                background: url(/src/assets/images/text-icon.png);
             }
         }
 
-        /deep/.uploader-file-actions > span {
+        .uploader-file-actions > span {
             margin-right: 6px;
         }
     }
